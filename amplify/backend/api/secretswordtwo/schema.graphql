@@ -21,6 +21,10 @@ type Monster @model (
   skillId2: ID
   skillId3: ID
   skillId4: ID
+  skill1: Skill! @connection(fields: ["skillId1"])
+  skill2: Skill @connection(fields: ["skillId2"])
+  skill3: Skill @connection(fields: ["skillId3"])
+  skill4: Skill @connection(fields: ["skillId4"])
   timestamp: Int!
 }
 

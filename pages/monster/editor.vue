@@ -130,9 +130,57 @@
         <span class="text-h6">スキル</span>
       </v-subheader>
       <v-card-text>
-        <base-row label="スキル１" partition="3">
+        <base-row label="スキル1" partition="3">
+          <v-btn
+            class="ma-1"
+            plain
+            @click="openSkillDialog(1)"
+          >
+            {{ data.skillId1 ? data.skill1.name : 'スキルを選択する' }}
+          </v-btn>
+        </base-row>
+        <base-row label="スキル2" partition="3">
+          <v-btn
+            class="ma-1"
+            plain
+            @click="openSkillDialog(2)"
+          >
+            {{ data.skillId2 ? data.skill2.name : 'スキルを選択する' }}
+          </v-btn>
+        </base-row>
+        <base-row label="スキル3" partition="3">
+          <v-btn
+            class="ma-1"
+            plain
+            @click="openSkillDialog(3)"
+          >
+            {{ data.skillId3 ? data.skill3.name : 'スキルを選択する' }}
+          </v-btn>
+        </base-row>
+        <base-row label="スキル4" partition="3">
+          <v-btn
+            class="ma-1"
+            plain
+            @click="openSkillDialog(4)"
+          >
+            {{ data.skillId4 ? data.skill4.name : 'スキルを選択する' }}
+          </v-btn>
+        </base-row>
+      </v-card-text>
+    </v-form>
+    <v-dialog v-model="skillDialog" max-width="600px">
+      <v-card>
+        <v-list two-line subheader color="primary" dark>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title class="text-h5 my-3">スキル選択</v-list-item-title>
+              <v-list-item-subtitle>スキルを検索して下さい。</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <v-card-text>
           <v-autocomplete
-            v-model="data.skillId1"
+            v-model="selectSkill"
             :items="skills"
             :loading="isLoading"
             :search-input.sync="search"
@@ -144,61 +192,16 @@
             label="技を検索"
             placeholder="Start typing to Search"
             prepend-icon="mdi-database-search"
-          />
-        </base-row>
-        <!--<base-row label="スキル２" partition="3">
-          <v-autocomplete
-            v-model="data.skillId2"
-            :items="skills2"
-            :loading="isLoading2"
-            :search-input.sync="search"
-            color="white"
-            hide-no-data
-            hide-selected
-            item-text="name"
-            item-value="id"
-            label="Public APIs"
-            placeholder="Start typing to Search"
-            prepend-icon="mdi-database-search"
             return-object
           />
-        </base-row>
-        <base-row label="スキル３" partition="3">
-          <v-autocomplete
-            v-model="data.skillId3"
-            :items="skills3"
-            :loading="isLoading3"
-            :search-input.sync="search"
-            color="white"
-            hide-no-data
-            hide-selected
-            item-text="name"
-            item-value="id"
-            label="Public APIs"
-            placeholder="Start typing to Search"
-            prepend-icon="mdi-database-search"
-            return-object
-          />
-        </base-row>
-        <base-row label="スキル４" partition="3">
-          <v-autocomplete
-            v-model="data.skillId4"
-            :items="skills4"
-            :loading="isLoading4"
-            :search-input.sync="search"
-            color="white"
-            hide-no-data
-            hide-selected
-            item-text="name"
-            item-value="id"
-            label="Public APIs"
-            placeholder="Start typing to Search"
-            prepend-icon="mdi-database-search"
-            return-object
-          />
-        </base-row>-->
-      </v-card-text>
-    </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="" @click="delDialog = false">キャンセル</v-btn>
+          <v-btn color="primary" @click="setSkill()"><v-icon left>mdi-book-open-blank-variant</v-icon>変更する</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -226,11 +229,17 @@ export default {
         skillId1: null,
         skillId2: null,
         skillId3: null,
-        skillId4: null
+        skillId4: null,
+        skill1: null,
+        skill2: null,
+        skill3: null,
+        skill4: null
       },
 
-      descriptionLimit: 60,
       skills: [],
+      skillDialog: false,
+      selectNum: null,
+      selectSkill: null,
       isLoading: false,
       model: null,
       search: null
@@ -309,6 +318,10 @@ export default {
       console.log(this.data)
       if (!this.$refs.form.validate()) { return }
       await this.uploadIcon()
+      delete this.data.skill1
+      delete this.data.skill2
+      delete this.data.skill3
+      delete this.data.skill4
       if (this.isNew) {
         this.data.timestamp = Math.floor(Date.now() / 1000)
         await API.graphql(graphqlOperation(createMonster, {
@@ -320,6 +333,33 @@ export default {
         }))
       }
       this.$router.push('/monster')
+    },
+    openSkillDialog (num) {
+      this.selectNum = num
+      this.skillDialog = true
+    },
+    setSkill () {
+      switch (this.selectNum) {
+        case 1:
+          this.data.skill1 = this.selectSkill
+          this.data.skillId1 = this.selectSkill.id
+          break
+        case 2:
+          this.data.skill2 = this.selectSkill
+          this.data.skillId2 = this.selectSkill.id
+          break
+        case 3:
+          this.data.skill3 = this.selectSkill
+          this.data.skillId3 = this.selectSkill.id
+          break
+        case 4:
+          this.data.skill4 = this.selectSkill
+          this.data.skillId4 = this.selectSkill.id
+          break
+      }
+      this.selectNum = null
+      this.selectSkill = null
+      this.skillDialog = false
     },
     generateUuid () {
       // https://github.com/GoogleChrome/chrome-platform-analytics/blob/master/src/internal/identifier.js

@@ -17,6 +17,42 @@ export const getMonster = /* GraphQL */ `
       skillId2
       skillId3
       skillId4
+      skill1 {
+        id
+        owner
+        name
+        description
+        power
+        hitrate
+        timestamp
+      }
+      skill2 {
+        id
+        owner
+        name
+        description
+        power
+        hitrate
+        timestamp
+      }
+      skill3 {
+        id
+        owner
+        name
+        description
+        power
+        hitrate
+        timestamp
+      }
+      skill4 {
+        id
+        owner
+        name
+        description
+        power
+        hitrate
+        timestamp
+      }
       timestamp
     }
   }
@@ -50,6 +86,42 @@ export const listMonsters = /* GraphQL */ `
         skillId2
         skillId3
         skillId4
+        skill1 {
+          id
+          owner
+          name
+          description
+          power
+          hitrate
+          timestamp
+        }
+        skill2 {
+          id
+          owner
+          name
+          description
+          power
+          hitrate
+          timestamp
+        }
+        skill3 {
+          id
+          owner
+          name
+          description
+          power
+          hitrate
+          timestamp
+        }
+        skill4 {
+          id
+          owner
+          name
+          description
+          power
+          hitrate
+          timestamp
+        }
         timestamp
       }
       nextToken
