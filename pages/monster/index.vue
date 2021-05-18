@@ -4,14 +4,14 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h5 my-3">
-            スキル
+            モンスター
           </v-list-item-title>
-          <v-list-item-subtitle>スキルを確認・追加・編集ができます。</v-list-item-subtitle>
+          <v-list-item-subtitle>モンスターを確認・追加・編集ができます。</v-list-item-subtitle>
         </v-list-item-content>
 
         <v-list-item-action>
           <v-row class="mr-1">
-            <v-btn color="error" fab dark class="mx-1" to="/skill/editor">
+            <v-btn color="error" fab dark class="mx-1" to="/monster/editor">
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </v-row>
@@ -62,7 +62,7 @@
         }"
       >
         <template #[`item.actions`]="{ item }">
-          <v-btn x-small icon :to="{ path: '/skill/editor', query: { id: item.id } }">
+          <v-btn x-small icon :to="{ path: '/monster/editor', query: { id: item.id } }">
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
           <v-btn x-small icon @click="openDelDialog(item.id)" class="mx-1">
@@ -93,8 +93,8 @@
 
 <script>
 import { API, graphqlOperation } from 'aws-amplify'
-import { listSkills } from '../../graphql/queries'
-import { deleteSkill } from '~/graphql/mutations'
+import { listMonsters } from '../../graphql/queries'
+import { deleteMonster } from '~/graphql/mutations'
 
 export default {
   middleware: 'auth',
@@ -106,19 +106,23 @@ export default {
       tab: 0,
       search: '',
       headers: [
-        { text: 'スキル名', value: 'name' },
+        { text: 'モンスター名', value: 'name' },
         { text: '説明', value: 'description' },
         { text: '作成者', value: 'owner' },
-        { text: '威力', value: 'power' },
-        { text: '命中率', value: 'hitrate' },
+        { text: 'HP', value: 'hp' },
+        { text: 'SPEED', value: 'spd' },
+        { text: 'ATTACK', value: 'atk' },
+        { text: 'DEFENCE', value: 'def' },
         { text: '操作', value: 'actions' }
       ],
       headerList: [
-        { text: 'スキル名', value: 'name' },
+        { text: 'モンスター名', value: 'name' },
         { text: '説明', value: 'description' },
         { text: '作成者', value: 'owner' },
-        { text: '威力', value: 'power' },
-        { text: '命中率', value: 'hitrate' },
+        { text: 'HP', value: 'hp' },
+        { text: 'SPEED', value: 'spd' },
+        { text: 'ATTACK', value: 'atk' },
+        { text: 'DEFENCE', value: 'def' },
         { text: '操作', value: 'actions' }
       ],
       data: []
@@ -134,15 +138,15 @@ export default {
   },
   methods: {
     async getData () {
-      const res = await API.graphql(graphqlOperation(listSkills, { limit: 9999999 }))
-      this.data = res.data.listSkills.items
+      const res = await API.graphql(graphqlOperation(listMonsters, { limit: 9999999 }))
+      this.data = res.data.listMonsters.items
     },
     openDelDialog (id) {
       this.delId = id
       this.delDialog = true
     },
     async deleteData () {
-      await API.graphql(graphqlOperation(deleteSkill, { input: { id: this.delId } }))
+      await API.graphql(graphqlOperation(deleteMonster, { input: { id: this.delId } }))
       this.delDialog = false
       await this.getData()
     },

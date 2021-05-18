@@ -11,6 +11,7 @@ export const createMonster = /* GraphQL */ `
       owner
       name
       description
+      imageUrl
       hp
       atk
       def
@@ -33,6 +34,7 @@ export const updateMonster = /* GraphQL */ `
       owner
       name
       description
+      imageUrl
       hp
       atk
       def
@@ -55,6 +57,7 @@ export const deleteMonster = /* GraphQL */ `
       owner
       name
       description
+      imageUrl
       hp
       atk
       def

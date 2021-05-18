@@ -8,6 +8,7 @@ export const getMonster = /* GraphQL */ `
       owner
       name
       description
+      imageUrl
       hp
       atk
       def
@@ -40,6 +41,7 @@ export const listMonsters = /* GraphQL */ `
         owner
         name
         description
+        imageUrl
         hp
         atk
         def
@@ -92,6 +94,35 @@ export const listSkills = /* GraphQL */ `
         timestamp
       }
       nextToken
+    }
+  }
+`;
+export const searchSkills = /* GraphQL */ `
+  query SearchSkills(
+    $filter: SearchableSkillFilterInput
+    $sort: SearchableSkillSortInput
+    $limit: Int
+    $nextToken: String
+    $from: Int
+  ) {
+    searchSkills(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+    ) {
+      items {
+        id
+        owner
+        name
+        description
+        power
+        hitrate
+        timestamp
+      }
+      nextToken
+      total
     }
   }
 `;

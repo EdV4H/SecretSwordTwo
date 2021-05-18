@@ -120,9 +120,14 @@ export default {
         //  ]
         // },
         {
+          text: 'モンスター一覧',
+          to: '/monster',
+          icon: 'mdi-space-invaders'
+        },
+        {
           text: 'スキル一覧',
           to: '/skill',
-          icon: 'mdi-bridge'
+          icon: 'mdi-book-open-blank-variant'
         }
       ],
       miniVariant: false,

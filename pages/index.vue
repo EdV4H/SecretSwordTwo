@@ -27,9 +27,16 @@ export default {
     return {
       menus: [
         {
+          title: 'モンスター一覧',
+          to: '/monster',
+          icon: 'mdi-space-invaders',
+          color: 'primary',
+          information: ''
+        },
+        {
           title: 'スキル一覧',
           to: '/skill',
-          icon: 'mdi-bridge',
+          icon: 'mdi-book-open-blank-variant',
           color: 'primary',
           information: ''
         }
