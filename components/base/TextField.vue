@@ -1,0 +1,14 @@
+<template>
+  <v-text-field
+    dense
+    single-line
+    outlined
+    v-bind="$attrs"
+    v-on="$listeners"
+  >
+    <slot
+      slot="append-outer"
+      name="append-outer"
+    />
+  </v-text-field>
+</template>

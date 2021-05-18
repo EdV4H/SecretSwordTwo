@@ -5,12 +5,17 @@ export const getMonster = /* GraphQL */ `
   query GetMonster($id: ID!) {
     getMonster(id: $id) {
       id
+      owner
       name
       description
       hp
       atk
       def
       spd
+      skillId1
+      skillId2
+      skillId3
+      skillId4
       timestamp
     }
   }
@@ -32,12 +37,17 @@ export const listMonsters = /* GraphQL */ `
     ) {
       items {
         id
+        owner
         name
         description
         hp
         atk
         def
         spd
+        skillId1
+        skillId2
+        skillId3
+        skillId4
         timestamp
       }
       nextToken
@@ -48,9 +58,12 @@ export const getSkill = /* GraphQL */ `
   query GetSkill($id: ID!) {
     getSkill(id: $id) {
       id
+      owner
       name
       description
       power
+      hitrate
+      timestamp
     }
   }
 `;
@@ -71,9 +84,12 @@ export const listSkills = /* GraphQL */ `
     ) {
       items {
         id
+        owner
         name
         description
         power
+        hitrate
+        timestamp
       }
       nextToken
     }

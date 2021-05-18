@@ -3,14 +3,23 @@ type Monster @model (
     subscriptions: null
   )
   @key(fields: ["id"])
+  @auth(rules: [
+    { allow: owner, ownerField: "owner", operations: [create, update, read, delete] }
+    { allow: private, provider: userPools, operations: [read] }
+  ])
 {
   id: ID!
+  owner: String
   name: String!
   description: String
   hp: Int!
   atk: Int!
   def: Int!
   spd: Int!
+  skillId1: ID!
+  skillId2: ID!
+  skillId3: ID!
+  skillId4: ID!
   timestamp: Int!
 }
 
@@ -19,8 +28,13 @@ type Skill @model (
     subscriptions: null
   )
   @key(fields: ["id"])
+  @auth(rules: [
+    { allow: owner, ownerField: "owner", operations: [create, update, read, delete] }
+    { allow: private, provider: userPools, operations: [read] }
+  ])
 {
   id: ID!
+  owner: String
   name: String!
   description: String
   power: Int!

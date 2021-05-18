@@ -8,12 +8,17 @@ export const createMonster = /* GraphQL */ `
   ) {
     createMonster(input: $input, condition: $condition) {
       id
+      owner
       name
       description
       hp
       atk
       def
       spd
+      skillId1
+      skillId2
+      skillId3
+      skillId4
       timestamp
     }
   }
@@ -25,12 +30,17 @@ export const updateMonster = /* GraphQL */ `
   ) {
     updateMonster(input: $input, condition: $condition) {
       id
+      owner
       name
       description
       hp
       atk
       def
       spd
+      skillId1
+      skillId2
+      skillId3
+      skillId4
       timestamp
     }
   }
@@ -42,12 +52,17 @@ export const deleteMonster = /* GraphQL */ `
   ) {
     deleteMonster(input: $input, condition: $condition) {
       id
+      owner
       name
       description
       hp
       atk
       def
       spd
+      skillId1
+      skillId2
+      skillId3
+      skillId4
       timestamp
     }
   }
@@ -59,9 +74,12 @@ export const createSkill = /* GraphQL */ `
   ) {
     createSkill(input: $input, condition: $condition) {
       id
+      owner
       name
       description
       power
+      hitrate
+      timestamp
     }
   }
 `;
@@ -72,9 +90,12 @@ export const updateSkill = /* GraphQL */ `
   ) {
     updateSkill(input: $input, condition: $condition) {
       id
+      owner
       name
       description
       power
+      hitrate
+      timestamp
     }
   }
 `;
@@ -85,9 +106,12 @@ export const deleteSkill = /* GraphQL */ `
   ) {
     deleteSkill(input: $input, condition: $condition) {
       id
+      owner
       name
       description
       power
+      hitrate
+      timestamp
     }
   }
 `;
