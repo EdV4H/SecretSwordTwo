@@ -1,90 +1,100 @@
 <template>
-  <v-app dark>
+  <v-app>
     <v-navigation-drawer
       v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
+      :clipped="$vuetify.breakpoint.lgAndUp"
       app
+      dark
     >
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
+      <v-list nav>
+        <template v-for="item in items">
+          <v-row
+            v-if="item.heading"
+            :key="item.heading"
+            align="center"
+          >
+            <v-col cols="6">
+              <v-subheader v-if="item.heading">
+                {{ item.heading }}
+              </v-subheader>
+            </v-col>
+            <v-col
+              cols="6"
+              class="text-center"
+            >
+              <a
+                href="#!"
+                class="body-2 black--text"
+              >EDIT</a>
+            </v-col>
+          </v-row>
+          <v-list-group
+            v-else-if="item.children"
+            :key="item.text"
+            v-model="item.model"
+            :prepend-icon="item.model ? item.icon : item['icon-alt']"
+            append-icon=""
+          >
+            <template #activator>
+              <v-list-item-content>
+                <v-list-item-text>
+                  {{ item.text }}
+                </v-list-item-text>
+              </v-list-item-content>
+            </template>
+            <v-list-item
+              v-for="(child, i) in item.children"
+              :key="i"
+              :to="child.to"
+              link
+            >
+              <v-list-item-action v-if="child.icon">
+                <v-icon>{{ child.icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-text>
+                  {{ child.text }}
+                </v-list-item-text>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+          <v-list-item
+            v-else
+            :key="item.text"
+            :to="item.to"
+            :href="item.href"
+            link
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ item.text }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
-      :clipped-left="clipped"
+      :clipped-left="$vuetify.breakpoint.lgAndUp"
       fixed
       app
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
+      <v-toolbar-title
+        class="ml-0 pl-4"
       >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
+        {{ title }} - ver {{ ver }}
+      </v-toolbar-title>
       <v-spacer />
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
         <nuxt />
       </v-container>
     </v-main>
-    <v-navigation-drawer
-      v-model="rightDrawer"
-      :right="right"
-      temporary
-      fixed
-    >
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer
-      :absolute="!fixed"
-      app
-    >
-      <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>
   </v-app>
 </template>
 
@@ -92,26 +102,38 @@
 export default {
   data () {
     return {
-      clipped: false,
+      clipped: true,
       drawer: false,
-      fixed: false,
+      fixed: true,
       items: [
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
+          icon: 'mdi-home',
+          text: 'ホーム',
           to: '/'
         },
+        // {
+        //  icon: 'mdi-chevron-up',
+        //  'icon-alt': 'mdi-chevron-down',
+        //  text: 'カテゴリー',
+        //  model: true,
+        //  children: [
+        //  ]
+        // },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
+          text: 'スキル一覧',
+          to: '/skill',
+          icon: 'mdi-bridge'
         }
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js'
+      title: 'Secret Sword Ⅱ',
+      ver: 'β1.00'
     }
+  },
+  mounted () {
+    if (this.$vuetify.breakpoint.lgAndUp) { this.drawer = true }
   }
 }
 </script>
