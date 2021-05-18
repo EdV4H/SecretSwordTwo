@@ -51,7 +51,7 @@
         :items-per-page="30"
         :search="search"
         sort-by="number"
-        class="elevation-1"
+        class="elevation-0"
         :footer-props="{
           itemsPerPageAllText: 'すべて表示',
           itemsPerPageOptions: [30, 50, 100, -1],
@@ -65,21 +65,44 @@
           <v-btn x-small icon :to="{ path: '/skill/editor', query: { id: item.id } }">
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
+          <v-btn x-small icon @click="openDelDialog(item.id)" class="mx-1">
+            <v-icon>mdi-trash-can</v-icon>
+          </v-btn>
         </template>
       </v-data-table>
     </v-card-text>
+    <v-dialog v-model="delDialog" max-width="600px">
+      <v-card>
+        <v-list two-line subheader color="error" dark>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title class="text-h5 my-3">データ削除</v-list-item-title>
+              <v-list-item-subtitle>データを削除しますか？この操作はやり直すことができません。</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="" @click="delDialog = false">キャンセル</v-btn>
+          <v-btn color="error" @click="deleteData()"><v-icon left>mdi-trash-can</v-icon>削除する</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
 <script>
 import { API, graphqlOperation } from 'aws-amplify'
 import { listSkills } from '../../graphql/queries'
+import { deleteSkill } from '~/graphql/mutations'
 
 export default {
   middleware: 'auth',
   data () {
     return {
       dialog: false,
+      delDialog: false,
+      delId: undefined,
       tab: 0,
       search: '',
       headers: [
@@ -111,6 +134,15 @@ export default {
     async getData () {
       const res = await API.graphql(graphqlOperation(listSkills, { limit: 9999999 }))
       this.data = res.data.listSkills.items
+    },
+    openDelDialog (id) {
+      this.delId = id
+      this.delDialog = true
+    },
+    async deleteData () {
+      await API.graphql(graphqlOperation(deleteSkill, { input: { id: this.delId } }))
+      this.delDialog = false
+      await this.getData()
     },
     setHeaders (headers) {
       this.headers = headers

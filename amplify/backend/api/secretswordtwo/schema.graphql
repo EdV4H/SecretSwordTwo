@@ -17,9 +17,9 @@ type Monster @model (
   def: Int!
   spd: Int!
   skillId1: ID!
-  skillId2: ID!
-  skillId3: ID!
-  skillId4: ID!
+  skillId2: ID
+  skillId3: ID
+  skillId4: ID
   timestamp: Int!
 }
 
