@@ -86,13 +86,15 @@ export default {
         { text: 'スキル名', value: 'name' },
         { text: '説明', value: 'description' },
         { text: '威力', value: 'power' },
-        { text: '命中率', value: 'hitrate' }
+        { text: '命中率', value: 'hitrate' },
+        { text: '操作', value: 'actions' }
       ],
       headerList: [
         { text: 'スキル名', value: 'name' },
         { text: '説明', value: 'description' },
         { text: '威力', value: 'power' },
-        { text: '命中率', value: 'hitrate' }
+        { text: '命中率', value: 'hitrate' },
+        { text: '操作', value: 'actions' }
       ],
       data: []
     }

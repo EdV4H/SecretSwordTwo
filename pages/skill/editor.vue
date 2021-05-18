@@ -114,7 +114,7 @@ export default {
       const res = await API.graphql(graphqlOperation(getSkill, {
         id: this.$route.query.id
       }))
-      this.data = res.data.getOthers
+      this.data = res.data.getSkill
     },
     async postData () {
       if (!this.$refs.form.validate()) { return }
