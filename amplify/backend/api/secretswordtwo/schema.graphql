@@ -1,0 +1,29 @@
+type Monster @model (
+    timestamps: null
+    subscriptions: null
+  )
+  @key(fields: ["id"])
+{
+  id: ID!
+  name: String!
+  description: String
+  hp: Int!
+  atk: Int!
+  def: Int!
+  spd: Int!
+  timestamp: Int!
+}
+
+type Skill @model (
+    timestamps: null
+    subscriptions: null
+  )
+  @key(fields: ["id"])
+{
+  id: ID!
+  name: String!
+  description: String
+  power: Int!
+  hitrate: Int!
+  timestamp: Int!
+}
