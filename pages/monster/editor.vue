@@ -141,19 +141,69 @@
             hide-selected
             item-text="name"
             item-value="id"
+            label="技を検索"
+            placeholder="Start typing to Search"
+            prepend-icon="mdi-database-search"
+          />
+        </base-row>
+        <!--<base-row label="スキル２" partition="3">
+          <v-autocomplete
+            v-model="data.skillId2"
+            :items="skills2"
+            :loading="isLoading2"
+            :search-input.sync="search"
+            color="white"
+            hide-no-data
+            hide-selected
+            item-text="name"
+            item-value="id"
             label="Public APIs"
             placeholder="Start typing to Search"
             prepend-icon="mdi-database-search"
             return-object
           />
         </base-row>
+        <base-row label="スキル３" partition="3">
+          <v-autocomplete
+            v-model="data.skillId3"
+            :items="skills3"
+            :loading="isLoading3"
+            :search-input.sync="search"
+            color="white"
+            hide-no-data
+            hide-selected
+            item-text="name"
+            item-value="id"
+            label="Public APIs"
+            placeholder="Start typing to Search"
+            prepend-icon="mdi-database-search"
+            return-object
+          />
+        </base-row>
+        <base-row label="スキル４" partition="3">
+          <v-autocomplete
+            v-model="data.skillId4"
+            :items="skills4"
+            :loading="isLoading4"
+            :search-input.sync="search"
+            color="white"
+            hide-no-data
+            hide-selected
+            item-text="name"
+            item-value="id"
+            label="Public APIs"
+            placeholder="Start typing to Search"
+            prepend-icon="mdi-database-search"
+            return-object
+          />
+        </base-row>-->
       </v-card-text>
     </v-form>
   </v-card>
 </template>
 
 <script>
-import { API, graphqlOperation } from 'aws-amplify'
+import { API, Storage, graphqlOperation } from 'aws-amplify'
 
 import { createMonster, updateMonster } from '../../graphql/mutations'
 import { getMonster, searchSkills } from '~/graphql/queries'
@@ -186,17 +236,16 @@ export default {
       search: null
     }
   },
-  mounted () {
+  async mounted () {
     if (this.$route.query.id) {
       this.isNew = false
-      this.getData()
+      await this.getData()
     } else {
       this.data.id = this.generateUuid()
     }
   },
   watch: {
     async search (val) {
-      console.log(val)
       if (val === '') { return }
 
       // Items have already been requested
@@ -213,9 +262,7 @@ export default {
         },
         limit: 20
       }))
-      console.log(res)
       this.skills = res.data.searchSkills.items
-      console.log(this.skills)
 
       this.isLoading = false
     }
@@ -227,6 +274,10 @@ export default {
         id: this.$route.query.id
       }))
       this.data = res.data.getMonster
+      const image = await Storage.get(this.data.imageUrl)
+      this.$refs.croppieRef.bind({
+        url: image
+      })
     },
     selectFile () {
       if (this.$refs.input !== undefined) {
@@ -255,7 +306,9 @@ export default {
       this.data.imageUrl = filepath
     },
     async postData () {
+      console.log(this.data)
       if (!this.$refs.form.validate()) { return }
+      await this.uploadIcon()
       if (this.isNew) {
         this.data.timestamp = Math.floor(Date.now() / 1000)
         await API.graphql(graphqlOperation(createMonster, {
@@ -266,7 +319,6 @@ export default {
           input: this.data
         }))
       }
-      await this.uploadIcon()
       this.$router.push('/monster')
     },
     generateUuid () {
