@@ -63,7 +63,7 @@
           </v-chip>
         </template>
         <template #[`item.actions`]="{ item }">
-          <v-btn x-small icon :to="{ path: '/skill/editor', query: { id: item.id } }">
+          <v-btn x-small icon :to="{ name: 'dna-id-skills-editor', query: { id: item.skillId } }">
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
         </template>
