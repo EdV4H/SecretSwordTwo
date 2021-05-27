@@ -1,4 +1,4 @@
-type Monster @model (
+type MonsterDna @model(
     timestamps: null
     subscriptions: null
   )
@@ -9,40 +9,31 @@ type Monster @model (
   ])
 {
   id: ID!
-  owner: String
+  dna: String!
   name: String!
-  description: String
+  description: String!
   imageUrl: String!
-  hp: Int!
-  atk: Int!
-  def: Int!
-  spd: Int!
-  skillId1: ID!
-  skillId2: ID
-  skillId3: ID
-  skillId4: ID
-  skill1: Skill! @connection(fields: ["skillId1"])
-  skill2: Skill @connection(fields: ["skillId2"])
-  skill3: Skill @connection(fields: ["skillId3"])
-  skill4: Skill @connection(fields: ["skillId4"])
   timestamp: Int!
+  skills: [Skill!] @connection(fields: ["id"])
 }
 
 type Skill @model (
     timestamps: null
     subscriptions: null
   )
-  @key(fields: ["id"])
+  @key(fields: ["monsterId", "skillId"])
   @auth(rules: [
     { allow: owner, ownerField: "owner", operations: [create, update, read, delete] }
     { allow: private, provider: userPools, operations: [read] }
   ])
   @searchable
 {
-  id: ID!
+  monsterId: ID!
+  skillId: ID!
   owner: String
   name: String!
   description: String
+  elements: Int!
   power: Int!
   hitrate: Int!
   timestamp: Int!

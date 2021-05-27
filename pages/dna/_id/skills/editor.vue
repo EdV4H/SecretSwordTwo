@@ -68,15 +68,30 @@
             suffix="%"
           />
         </base-row>
+
+        <base-row label="属性" partition="3">
+          <v-btn-toggle
+            v-model="elements"
+            mandatory
+            tile
+            group
+          >
+            <v-btn value="fire">火</v-btn>
+            <v-btn value="water">水</v-btn>
+            <v-btn value="leef">草</v-btn>
+            <v-btn value="light">光</v-btn>
+            <v-btn value="dark">闇</v-btn>
+          </v-btn-toggle>
+        </base-row>
       </v-card-text>
 
-      <v-divider class="mx-2 mb-2" />
+      <!--<v-divider class="mx-2 mb-2" />
       <v-subheader>
         <v-icon large left>
           mdi-shape-square-rounded-plus
         </v-icon>
         <span class="text-h6">追加効果</span>
-      </v-subheader>
+      </v-subheader>-->
     </v-form>
   </v-card>
 </template>
@@ -84,7 +99,7 @@
 <script>
 import { API, graphqlOperation } from 'aws-amplify'
 
-import { createSkill, updateSkill } from '../../graphql/mutations'
+import { createSkill, updateSkill } from '../../../../graphql/mutations'
 import { getSkill } from '~/graphql/queries'
 
 export default {
@@ -93,12 +108,15 @@ export default {
     return {
       valid: true,
       isNew: true,
+      elements: 'fire',
       data: {
-        id: null,
+        monsterId: null,
+        skillId: null,
         name: '',
         description: null,
         power: null,
-        hitrate: null
+        hitrate: null,
+        elements: null
       }
     }
   },
@@ -112,13 +130,31 @@ export default {
     async getData () {
       if (!this.$route.query.id) { return }
       const res = await API.graphql(graphqlOperation(getSkill, {
-        id: this.$route.query.id
+        monsterId: this.$route.params.id,
+        skillId: this.$route.query.id
       }))
       this.data = res.data.getSkill
     },
+    getElements () {
+      switch (this.elements) {
+        case 'fire':
+          return 0
+        case 'water':
+          return 1
+        case 'leef':
+          return 2
+        case 'light':
+          return 3
+        case 'dark':
+          return 4
+      }
+    },
     async postData () {
       if (!this.$refs.form.validate()) { return }
+      this.data.elements = this.getElements()
       if (this.isNew) {
+        this.data.monsterId = this.$route.params.id
+        this.data.skillId = this.generateUuid()
         this.data.timestamp = Math.floor(Date.now() / 1000)
         await API.graphql(graphqlOperation(createSkill, {
           input: this.data
@@ -128,7 +164,23 @@ export default {
           input: this.data
         }))
       }
-      this.$router.push('/skill')
+      this.$router.push({ name: 'dna-id-skills', params: { id: this.$route.params.id } })
+    },
+    generateUuid () {
+      // https://github.com/GoogleChrome/chrome-platform-analytics/blob/master/src/internal/identifier.js
+      // const FORMAT: string = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx";
+      const chars = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.split('')
+      for (let i = 0, len = chars.length; i < len; i++) {
+        switch (chars[i]) {
+          case 'x':
+            chars[i] = Math.floor(Math.random() * 16).toString(16)
+            break
+          case 'y':
+            chars[i] = (Math.floor(Math.random() * 4) + 8).toString(16)
+            break
+        }
+      }
+      return chars.join('')
     }
   }
 }

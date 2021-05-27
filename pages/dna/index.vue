@@ -4,14 +4,14 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h5 my-3">
-            モンスター
+            モンスターDNA
           </v-list-item-title>
-          <v-list-item-subtitle>モンスターを確認・追加・編集ができます。</v-list-item-subtitle>
+          <v-list-item-subtitle>モンスターDNAを確認・追加ができます。</v-list-item-subtitle>
         </v-list-item-content>
 
         <v-list-item-action>
           <v-row class="mr-1">
-            <v-btn color="error" fab dark class="mx-1" to="/monster/editor">
+            <v-btn color="error" fab dark class="mx-1" to="/dna/editor">
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </v-row>
@@ -62,7 +62,7 @@
         }"
       >
         <template #[`item.actions`]="{ item }">
-          <v-btn x-small icon :to="{ path: '/monster/editor', query: { id: item.id } }">
+          <v-btn x-small icon :to="{ name: 'dna-id-skills', params: { id: item.id } }">
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
           <v-btn x-small icon @click="openDelDialog(item.id)" class="mx-1">
@@ -93,8 +93,8 @@
 
 <script>
 import { API, graphqlOperation } from 'aws-amplify'
-import { listMonsters } from '../../graphql/queries'
-import { deleteMonster } from '~/graphql/mutations'
+import { listMonsterDnas } from '../../graphql/queries'
+import { deleteMonsterDna } from '~/graphql/mutations'
 
 export default {
   middleware: 'auth',
@@ -109,20 +109,14 @@ export default {
         { text: 'モンスター名', value: 'name' },
         { text: '説明', value: 'description' },
         { text: '作成者', value: 'owner' },
-        { text: 'HP', value: 'hp' },
-        { text: 'SPEED', value: 'spd' },
-        { text: 'ATTACK', value: 'atk' },
-        { text: 'DEFENCE', value: 'def' },
+        { text: 'DNA', value: 'dna' },
         { text: '操作', value: 'actions' }
       ],
       headerList: [
         { text: 'モンスター名', value: 'name' },
         { text: '説明', value: 'description' },
         { text: '作成者', value: 'owner' },
-        { text: 'HP', value: 'hp' },
-        { text: 'SPEED', value: 'spd' },
-        { text: 'ATTACK', value: 'atk' },
-        { text: 'DEFENCE', value: 'def' },
+        { text: 'DNA', value: 'dna' },
         { text: '操作', value: 'actions' }
       ],
       data: []
@@ -138,15 +132,15 @@ export default {
   },
   methods: {
     async getData () {
-      const res = await API.graphql(graphqlOperation(listMonsters, { limit: 9999999 }))
-      this.data = res.data.listMonsters.items
+      const res = await API.graphql(graphqlOperation(listMonsterDnas, { limit: 9999999 }))
+      this.data = res.data.listMonsterDnas.items
     },
     openDelDialog (id) {
       this.delId = id
       this.delDialog = true
     },
     async deleteData () {
-      await API.graphql(graphqlOperation(deleteMonster, { input: { id: this.delId } }))
+      await API.graphql(graphqlOperation(deleteMonsterDna, { input: { id: this.delId } }))
       this.delDialog = false
       await this.getData()
     },

@@ -1,71 +1,42 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getMonster = /* GraphQL */ `
-  query GetMonster($id: ID!) {
-    getMonster(id: $id) {
+export const getMonsterDna = /* GraphQL */ `
+  query GetMonsterDna($id: ID!) {
+    getMonsterDna(id: $id) {
       id
-      owner
+      dna
       name
       description
       imageUrl
-      hp
-      atk
-      def
-      spd
-      skillId1
-      skillId2
-      skillId3
-      skillId4
-      skill1 {
-        id
-        owner
-        name
-        description
-        power
-        hitrate
-        timestamp
-      }
-      skill2 {
-        id
-        owner
-        name
-        description
-        power
-        hitrate
-        timestamp
-      }
-      skill3 {
-        id
-        owner
-        name
-        description
-        power
-        hitrate
-        timestamp
-      }
-      skill4 {
-        id
-        owner
-        name
-        description
-        power
-        hitrate
-        timestamp
-      }
       timestamp
+      skills {
+        items {
+          monsterId
+          skillId
+          owner
+          name
+          description
+          elements
+          power
+          hitrate
+          timestamp
+        }
+        nextToken
+      }
+      owner
     }
   }
 `;
-export const listMonsters = /* GraphQL */ `
-  query ListMonsters(
+export const listMonsterDnas = /* GraphQL */ `
+  query ListMonsterDnas(
     $id: ID
-    $filter: ModelMonsterFilterInput
+    $filter: ModelMonsterDnaFilterInput
     $limit: Int
     $nextToken: String
     $sortDirection: ModelSortDirection
   ) {
-    listMonsters(
+    listMonsterDnas(
       id: $id
       filter: $filter
       limit: $limit
@@ -74,67 +45,29 @@ export const listMonsters = /* GraphQL */ `
     ) {
       items {
         id
-        owner
+        dna
         name
         description
         imageUrl
-        hp
-        atk
-        def
-        spd
-        skillId1
-        skillId2
-        skillId3
-        skillId4
-        skill1 {
-          id
-          owner
-          name
-          description
-          power
-          hitrate
-          timestamp
-        }
-        skill2 {
-          id
-          owner
-          name
-          description
-          power
-          hitrate
-          timestamp
-        }
-        skill3 {
-          id
-          owner
-          name
-          description
-          power
-          hitrate
-          timestamp
-        }
-        skill4 {
-          id
-          owner
-          name
-          description
-          power
-          hitrate
-          timestamp
-        }
         timestamp
+        skills {
+          nextToken
+        }
+        owner
       }
       nextToken
     }
   }
 `;
 export const getSkill = /* GraphQL */ `
-  query GetSkill($id: ID!) {
-    getSkill(id: $id) {
-      id
+  query GetSkill($monsterId: ID!, $skillId: ID!) {
+    getSkill(monsterId: $monsterId, skillId: $skillId) {
+      monsterId
+      skillId
       owner
       name
       description
+      elements
       power
       hitrate
       timestamp
@@ -143,24 +76,28 @@ export const getSkill = /* GraphQL */ `
 `;
 export const listSkills = /* GraphQL */ `
   query ListSkills(
-    $id: ID
+    $monsterId: ID
+    $skillId: ModelIDKeyConditionInput
     $filter: ModelSkillFilterInput
     $limit: Int
     $nextToken: String
     $sortDirection: ModelSortDirection
   ) {
     listSkills(
-      id: $id
+      monsterId: $monsterId
+      skillId: $skillId
       filter: $filter
       limit: $limit
       nextToken: $nextToken
       sortDirection: $sortDirection
     ) {
       items {
-        id
+        monsterId
+        skillId
         owner
         name
         description
+        elements
         power
         hitrate
         timestamp
@@ -185,10 +122,12 @@ export const searchSkills = /* GraphQL */ `
       from: $from
     ) {
       items {
-        id
+        monsterId
+        skillId
         owner
         name
         description
+        elements
         power
         hitrate
         timestamp

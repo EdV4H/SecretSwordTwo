@@ -1,180 +1,93 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createMonster = /* GraphQL */ `
-  mutation CreateMonster(
-    $input: CreateMonsterInput!
-    $condition: ModelMonsterConditionInput
+export const createMonsterDna = /* GraphQL */ `
+  mutation CreateMonsterDna(
+    $input: CreateMonsterDnaInput!
+    $condition: ModelMonsterDnaConditionInput
   ) {
-    createMonster(input: $input, condition: $condition) {
+    createMonsterDna(input: $input, condition: $condition) {
       id
-      owner
+      dna
       name
       description
       imageUrl
-      hp
-      atk
-      def
-      spd
-      skillId1
-      skillId2
-      skillId3
-      skillId4
-      skill1 {
-        id
-        owner
-        name
-        description
-        power
-        hitrate
-        timestamp
-      }
-      skill2 {
-        id
-        owner
-        name
-        description
-        power
-        hitrate
-        timestamp
-      }
-      skill3 {
-        id
-        owner
-        name
-        description
-        power
-        hitrate
-        timestamp
-      }
-      skill4 {
-        id
-        owner
-        name
-        description
-        power
-        hitrate
-        timestamp
-      }
       timestamp
+      skills {
+        items {
+          monsterId
+          skillId
+          owner
+          name
+          description
+          elements
+          power
+          hitrate
+          timestamp
+        }
+        nextToken
+      }
+      owner
     }
   }
 `;
-export const updateMonster = /* GraphQL */ `
-  mutation UpdateMonster(
-    $input: UpdateMonsterInput!
-    $condition: ModelMonsterConditionInput
+export const updateMonsterDna = /* GraphQL */ `
+  mutation UpdateMonsterDna(
+    $input: UpdateMonsterDnaInput!
+    $condition: ModelMonsterDnaConditionInput
   ) {
-    updateMonster(input: $input, condition: $condition) {
+    updateMonsterDna(input: $input, condition: $condition) {
       id
-      owner
+      dna
       name
       description
       imageUrl
-      hp
-      atk
-      def
-      spd
-      skillId1
-      skillId2
-      skillId3
-      skillId4
-      skill1 {
-        id
-        owner
-        name
-        description
-        power
-        hitrate
-        timestamp
-      }
-      skill2 {
-        id
-        owner
-        name
-        description
-        power
-        hitrate
-        timestamp
-      }
-      skill3 {
-        id
-        owner
-        name
-        description
-        power
-        hitrate
-        timestamp
-      }
-      skill4 {
-        id
-        owner
-        name
-        description
-        power
-        hitrate
-        timestamp
-      }
       timestamp
+      skills {
+        items {
+          monsterId
+          skillId
+          owner
+          name
+          description
+          elements
+          power
+          hitrate
+          timestamp
+        }
+        nextToken
+      }
+      owner
     }
   }
 `;
-export const deleteMonster = /* GraphQL */ `
-  mutation DeleteMonster(
-    $input: DeleteMonsterInput!
-    $condition: ModelMonsterConditionInput
+export const deleteMonsterDna = /* GraphQL */ `
+  mutation DeleteMonsterDna(
+    $input: DeleteMonsterDnaInput!
+    $condition: ModelMonsterDnaConditionInput
   ) {
-    deleteMonster(input: $input, condition: $condition) {
+    deleteMonsterDna(input: $input, condition: $condition) {
       id
-      owner
+      dna
       name
       description
       imageUrl
-      hp
-      atk
-      def
-      spd
-      skillId1
-      skillId2
-      skillId3
-      skillId4
-      skill1 {
-        id
-        owner
-        name
-        description
-        power
-        hitrate
-        timestamp
-      }
-      skill2 {
-        id
-        owner
-        name
-        description
-        power
-        hitrate
-        timestamp
-      }
-      skill3 {
-        id
-        owner
-        name
-        description
-        power
-        hitrate
-        timestamp
-      }
-      skill4 {
-        id
-        owner
-        name
-        description
-        power
-        hitrate
-        timestamp
-      }
       timestamp
+      skills {
+        items {
+          monsterId
+          skillId
+          owner
+          name
+          description
+          elements
+          power
+          hitrate
+          timestamp
+        }
+        nextToken
+      }
+      owner
     }
   }
 `;
@@ -184,10 +97,12 @@ export const createSkill = /* GraphQL */ `
     $condition: ModelSkillConditionInput
   ) {
     createSkill(input: $input, condition: $condition) {
-      id
+      monsterId
+      skillId
       owner
       name
       description
+      elements
       power
       hitrate
       timestamp
@@ -200,10 +115,12 @@ export const updateSkill = /* GraphQL */ `
     $condition: ModelSkillConditionInput
   ) {
     updateSkill(input: $input, condition: $condition) {
-      id
+      monsterId
+      skillId
       owner
       name
       description
+      elements
       power
       hitrate
       timestamp
@@ -216,10 +133,12 @@ export const deleteSkill = /* GraphQL */ `
     $condition: ModelSkillConditionInput
   ) {
     deleteSkill(input: $input, condition: $condition) {
-      id
+      monsterId
+      skillId
       owner
       name
       description
+      elements
       power
       hitrate
       timestamp

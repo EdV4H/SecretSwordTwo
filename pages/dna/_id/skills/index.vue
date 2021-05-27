@@ -4,14 +4,14 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h5 my-3">
-            スキル
+            スキル - {{ $route.params.id }}
           </v-list-item-title>
           <v-list-item-subtitle>スキルを確認・追加・編集ができます。</v-list-item-subtitle>
         </v-list-item-content>
 
         <v-list-item-action>
           <v-row class="mr-1">
-            <v-btn color="error" fab dark class="mx-1" to="/skill/editor">
+            <v-btn color="error" fab dark class="mx-1" :to="{ name: 'dna-id-skills-editor', params: { id: $route.params.id } }">
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </v-row>
@@ -20,15 +20,9 @@
     </v-list>
 
     <v-card-text>
-      <v-row dense>
-        <v-col cols="8">
-          <base-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-          />
-        </v-col>
-      </v-row>
+      <base-monster-profile
+        :monsterId="$route.params.id"
+      />
 
       <v-dialog v-model="dialog" max-width="400px">
         <template #activator="{ on }">
@@ -49,7 +43,6 @@
         :headers="headers"
         :items="displayItems"
         :items-per-page="30"
-        :search="search"
         sort-by="number"
         class="elevation-0"
         :footer-props="{
@@ -61,54 +54,40 @@
           showFirstLastPage: true,
         }"
       >
+        <template #[`item.elements`]="{ item }">
+          <v-chip
+            :color="getColor(item.elements)"
+            dark
+          >
+            {{ getElements(item.elements) }}
+          </v-chip>
+        </template>
         <template #[`item.actions`]="{ item }">
           <v-btn x-small icon :to="{ path: '/skill/editor', query: { id: item.id } }">
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
-          <v-btn x-small icon @click="openDelDialog(item.id)" class="mx-1">
-            <v-icon>mdi-trash-can</v-icon>
-          </v-btn>
         </template>
       </v-data-table>
     </v-card-text>
-    <v-dialog v-model="delDialog" max-width="600px">
-      <v-card>
-        <v-list two-line subheader color="error" dark>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title class="text-h5 my-3">データ削除</v-list-item-title>
-              <v-list-item-subtitle>データを削除しますか？この操作はやり直すことができません。</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="" @click="delDialog = false">キャンセル</v-btn>
-          <v-btn color="error" @click="deleteData()"><v-icon left>mdi-trash-can</v-icon>削除する</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </v-card>
 </template>
 
 <script>
 import { API, graphqlOperation } from 'aws-amplify'
-import { listSkills } from '../../graphql/queries'
-import { deleteSkill } from '~/graphql/mutations'
+import { listSkills } from '../../../../graphql/queries'
 
 export default {
   middleware: 'auth',
   data () {
     return {
       dialog: false,
-      delDialog: false,
       delId: undefined,
       tab: 0,
-      search: '',
       headers: [
         { text: 'スキル名', value: 'name' },
         { text: '説明', value: 'description' },
         { text: '作成者', value: 'owner' },
+        { text: '属性', value: 'elements' },
         { text: '威力', value: 'power' },
         { text: '命中率', value: 'hitrate' },
         { text: '操作', value: 'actions' }
@@ -117,6 +96,7 @@ export default {
         { text: 'スキル名', value: 'name' },
         { text: '説明', value: 'description' },
         { text: '作成者', value: 'owner' },
+        { text: '属性', value: 'elements' },
         { text: '威力', value: 'power' },
         { text: '命中率', value: 'hitrate' },
         { text: '操作', value: 'actions' }
@@ -130,25 +110,53 @@ export default {
     }
   },
   mounted () {
-    this.getData()
+    if (this.$route.params.id) {
+      this.getData()
+    } else {
+      this.$router.push('/')
+    }
   },
   methods: {
     async getData () {
-      const res = await API.graphql(graphqlOperation(listSkills, { limit: 9999999 }))
+      const res = await API.graphql(graphqlOperation(listSkills, {
+        limit: 9999999,
+        monsterId: this.$route.params.id
+      }))
       this.data = res.data.listSkills.items
     },
     openDelDialog (id) {
       this.delId = id
       this.delDialog = true
     },
-    async deleteData () {
-      await API.graphql(graphqlOperation(deleteSkill, { input: { id: this.delId } }))
-      this.delDialog = false
-      await this.getData()
-    },
     setHeaders (headers) {
       this.headers = headers
       this.dialog = false
+    },
+    getColor (elements) {
+      if (elements === 0) {
+        return 'red'
+      } else if (elements === 1) {
+        return 'blue'
+      } else if (elements === 2) {
+        return 'green'
+      } else if (elements === 3) {
+        return 'yellow darken-3'
+      } else if (elements === 4) {
+        return 'purple'
+      } else { return 'grey' }
+    },
+    getElements (elements) {
+      if (elements === 0) {
+        return '火'
+      } else if (elements === 1) {
+        return '水'
+      } else if (elements === 2) {
+        return '草'
+      } else if (elements === 3) {
+        return '光'
+      } else if (elements === 4) {
+        return '闇'
+      } else { return '無' }
     }
   }
 }

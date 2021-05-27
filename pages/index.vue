@@ -27,16 +27,9 @@ export default {
     return {
       menus: [
         {
-          title: 'モンスター一覧',
-          to: '/monster',
+          title: 'モンスターDNA一覧',
+          to: '/dna',
           icon: 'mdi-space-invaders',
-          color: 'primary',
-          information: ''
-        },
-        {
-          title: 'スキル一覧',
-          to: '/skill',
-          icon: 'mdi-book-open-blank-variant',
           color: 'primary',
           information: ''
         }
