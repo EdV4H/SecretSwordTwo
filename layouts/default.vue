@@ -133,7 +133,7 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Secret Sword Ⅱ',
+      title: 'Secret Sword Ⅱ ~ 俺たちの妄想は動き出した ~',
       ver: 'β1.00'
     }
   },
